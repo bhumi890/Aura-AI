@@ -13,10 +13,19 @@ API Documentation:
     http://localhost:8000/redoc (ReDoc)
 """
 
+import os
+
+# Limit thread memory allocations for Render free tier (512MB RAM limit)
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("VECLIB_MAXIMUM_THREADS", "1")
+os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os
 
 from backend.config import get_settings
 from backend.database.connection import create_tables

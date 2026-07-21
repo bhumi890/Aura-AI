@@ -11,7 +11,6 @@ from __future__ import annotations
 from functools import lru_cache
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 from ai_core.rag.config import settings
 from ai_core.rag.logging_utils import get_logger
@@ -21,8 +20,9 @@ logger = get_logger(__name__)
 
 
 @lru_cache(maxsize=1)
-def _load_model(model_name: str, device: str) -> SentenceTransformer:
+def _load_model(model_name: str, device: str):
     """Load (and cache) the SentenceTransformer model. Loading is expensive."""
+    from sentence_transformers import SentenceTransformer
     logger.info("Loading embedding model '%s' on device '%s'", model_name, device)
     return SentenceTransformer(model_name, device=device)
 
@@ -39,18 +39,24 @@ class Embedder:
         self.model_name = model_name or settings.embedding_model_name
         self.device = device or settings.embedding_device
         self.batch_size = batch_size or settings.embedding_batch_size
-        self._model = _load_model(self.model_name, self.device)
+        self._model = None
+
+    @property
+    def model(self):
+        if self._model is None:
+            self._model = _load_model(self.model_name, self.device)
+        return self._model
 
     @property
     def dimension(self) -> int:
-        return int(self._model.get_sentence_embedding_dimension())
+        return int(self.model.get_sentence_embedding_dimension())
 
     def embed_texts(self, texts: list[str]) -> np.ndarray:
         """Embed a batch of raw strings, returning an (N, dim) float32 array."""
         if not texts:
             return np.empty((0, self.dimension), dtype=np.float32)
 
-        embeddings = self._model.encode(
+        embeddings = self.model.encode(
             texts,
             batch_size=self.batch_size,
             convert_to_numpy=True,

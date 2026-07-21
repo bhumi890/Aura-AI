@@ -53,6 +53,8 @@ langchain-core>=0.3.37
 psycopg[binary]>=3.2.10
 
 # --- RAG / Knowledge Agent ---
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2.0+cpu
 langchain-text-splitters>=0.3.2
 sentence-transformers>=3.3.1
 huggingface-hub>=0.26.2
