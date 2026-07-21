@@ -123,8 +123,8 @@ allowed_origins = [
 if settings.FRONTEND_URL and settings.FRONTEND_URL not in allowed_origins:
     allowed_origins.append(settings.FRONTEND_URL)
 
-# Also allow *.onrender.com for Render preview URLs
-allowed_origins_regex = r"https://.*\.onrender\.com"
+# Also allow *.onrender.com and *.vercel.app for deployed frontends
+allowed_origins_regex = r"https://.*\.onrender\.com|https://.*\.vercel\.app"
 
 app.add_middleware(
     CORSMiddleware,
