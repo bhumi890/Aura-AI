@@ -41,17 +41,21 @@ _open_checkpointer_cms = []
 
 
 async def get_checkpointer():
-    if ENV == "production":
-        cm = AsyncPostgresSaver.from_conn_string(POSTGRES_CONN_STRING)
-        checkpointer = await cm.__aenter__()  # actual AsyncPostgresSaver, not the cm
-        _open_checkpointer_cms.append(cm)
-        await checkpointer.setup()  # creates tables on first run, no-op after
-        return checkpointer
-    else:
-        cm = AsyncSqliteSaver.from_conn_string(SQLITE_DB_PATH)
-        checkpointer = await cm.__aenter__()  # actual AsyncSqliteSaver, not the cm
-        _open_checkpointer_cms.append(cm)
-        return checkpointer
+    if ENV == "production" and POSTGRES_CONN_STRING:
+        try:
+            cm = AsyncPostgresSaver.from_conn_string(POSTGRES_CONN_STRING)
+            checkpointer = await cm.__aenter__()  # actual AsyncPostgresSaver, not the cm
+            _open_checkpointer_cms.append(cm)
+            await checkpointer.setup()  # creates tables on first run, no-op after
+            return checkpointer
+        except Exception as e:
+            from ai_core.rag.logging_utils import get_logger
+            get_logger(__name__).warning("Postgres checkpointer unavailable (%s), falling back to SQLite", e)
+
+    cm = AsyncSqliteSaver.from_conn_string(SQLITE_DB_PATH)
+    checkpointer = await cm.__aenter__()  # actual AsyncSqliteSaver, not the cm
+    _open_checkpointer_cms.append(cm)
+    return checkpointer
 
 
 async def close_checkpointers():
