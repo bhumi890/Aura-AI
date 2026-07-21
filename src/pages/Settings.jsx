@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Shield, User, Brain } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function Settings() {
   const [voiceMode, setVoiceMode] = useState('calm');
@@ -14,7 +15,7 @@ export default function Settings() {
     setIsLoadingProfile(true);
     try {
       const userId = localStorage.getItem('mindmate_user_id') || 'default-user';
-      const res = await fetch(`/api/users/${userId}/profile`);
+      const res = await fetch(`${API_BASE_URL}/api/users/${userId}/profile`);
       if (res.ok) {
         const data = await res.json();
         setProfileData(data);
@@ -42,7 +43,7 @@ export default function Settings() {
     if (!window.confirm("Are you sure you want to clear your AI memory? Aura will forget personal background details across sessions.")) return;
     try {
       const userId = localStorage.getItem('mindmate_user_id') || 'default-user';
-      await fetch(`/api/users/${userId}/profile/memory`, { method: 'DELETE' });
+      await fetch(`${API_BASE_URL}/api/users/${userId}/profile/memory`, { method: 'DELETE' });
       await fetchProfile();
       alert('AI memory summary cleared successfully.');
     } catch (e) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Activity, Brain, Clock, HeartPulse, Sparkles, TrendingUp } from 'lucide-react';
 import { analyzeMood, getMoodLogs } from '../utils/moodAnalyzer';
+import { API_BASE_URL } from '../config';
 
 export default function Dashboard({ activeTab }) {
   const [moodData, setMoodData] = useState({
@@ -17,12 +18,12 @@ export default function Dashboard({ activeTab }) {
       let combinedLogs = [...getMoodLogs()];
       try {
         const userId = localStorage.getItem('mindmate_user_id') || 'default-user';
-        const res = await fetch(`/api/history/?user_id=${userId}&page_size=10`);
+        const res = await fetch(`${API_BASE_URL}/api/history/?user_id=${userId}&page_size=10`);
         if (res.ok) {
           const data = await res.json();
           const items = data.items || [];
           for (const item of items.slice(0, 5)) {
-            const detailRes = await fetch(`/api/history/${item.id}`);
+            const detailRes = await fetch(`${API_BASE_URL}/api/history/${item.id}`);
             if (detailRes.ok) {
               const detailData = await detailRes.json();
               if (detailData.messages) {

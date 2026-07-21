@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LogIn, UserPlus, ShieldCheck, HeartPulse, Loader2 } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function Login({ onLogin }) {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -18,7 +19,8 @@ export default function Login({ onLogin }) {
     }
 
     setIsLoading(true);
-    const endpoint = isRegistering ? '/api/users/register' : '/api/users/login';
+    const path = isRegistering ? '/api/users/register' : '/api/users/login';
+    const endpoint = `${API_BASE_URL}${path}`;
 
     try {
       const res = await fetch(endpoint, {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Activity, HeartPulse, Send, AlertTriangle, Volume2, VolumeX, Plus, MessageSquare, Trash2, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { analyzeMood, saveMoodLog } from '../utils/moodAnalyzer';
-
+import { API_BASE_URL } from '../config';
 
 // ─── Markdown stripper (for clean TTS) ──────────────────────
 function stripMarkdown(text) {
@@ -81,7 +81,7 @@ export default function VoiceChat() {
   const fetchHistory = async () => {
     try {
       const userId = localStorage.getItem('mindmate_user_id') || 'default-user';
-      const res = await fetch(`/api/history/?user_id=${userId}`);
+      const res = await fetch(`${API_BASE_URL}/api/history/?user_id=${userId}`);
       if (res.ok) {
         const data = await res.json();
         setConversationsList(data.items || []);
@@ -113,7 +113,7 @@ export default function VoiceChat() {
     }
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/history/${id}`);
+      const res = await fetch(`${API_BASE_URL}/api/history/${id}`);
       if (res.ok) {
         const data = await res.json();
         setConversationId(id);
@@ -136,7 +136,7 @@ export default function VoiceChat() {
   const handleDeleteConversation = async (id, e) => {
     e.stopPropagation();
     try {
-      const res = await fetch(`/api/history/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE_URL}/api/history/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setConversationsList(prev => prev.filter(c => c.id !== id));
         if (conversationId === id) {
@@ -157,7 +157,7 @@ export default function VoiceChat() {
 
     const checkHealth = async () => {
       try {
-        const res = await fetch('/api/chat/health');
+        const res = await fetch(`${API_BASE_URL}/api/chat/health`);
         if (res.ok) setBackendAvailable(true);
       } catch { /* ignore */ }
     };
@@ -285,7 +285,7 @@ export default function VoiceChat() {
   const getBackendResponse = async (userMessage) => {
     try {
       const userId = localStorage.getItem('mindmate_user_id') || 'default-user';
-      const response = await fetch('/api/chat/', {
+      const response = await fetch(`${API_BASE_URL}/api/chat/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

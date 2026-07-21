@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/api/:match*",
-      "destination": "https://aura-ai-backend-ecf1.onrender.com/api/:match*"
+      "source": "/api/:path*",
+      "destination": "https://aura-ai-backend-ecf1.onrender.com/api/:path*"
     },
     {
-      "source": "/:path*",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
