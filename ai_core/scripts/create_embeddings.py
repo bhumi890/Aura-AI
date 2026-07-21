@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""
+Rebuild the FAISS index and embeddings from scratch.
+
+Deletes any existing persisted index and re-ingests every document in
+`rag/documents` from the beginning.
+
+Usage:
+    python scripts/create_embeddings.py
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from ai_core.rag.ingestion import IngestionPipeline  # noqa: E402
+from ai_core.rag.logging_utils import get_logger  # noqa: E402
+
+logger = get_logger(__name__)
+
+
+def main() -> None:
+    pipeline = IngestionPipeline()
+    num_chunks = pipeline.run(rebuild=True)
+    logger.info("create_embeddings.py finished: rebuilt index with %d chunk(s)", num_chunks)
+
+
+if __name__ == "__main__":
+    main()

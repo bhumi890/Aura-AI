@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Aura Light Mode Variables — Sage / Off-White / Slate Teal */
+    --background: #f4f6f6;
+    --foreground: #1c2e35;
+    --surface: #ffffff;
+    --surface-foreground: #1c2e35;
+    --border: #d4e2dd;
+    --input: #e8eff0;
+    --primary: #2c5364;
+    --primary-foreground: #ffffff;
+    --muted: #e8eff0;
+    --muted-foreground: #5a737e;
+    --accent-sage: #cadece;
+    --accent-slate: #b8c9c3;
+  }
+
+  .dark {
+    /* Aura Dark Mode Variables — Deep Slate Ocean / Soft Sage */
+    --background: #0c1417;
+    --foreground: #eaefef;
+    --surface: #152228;
+    --surface-foreground: #eaefef;
+    --border: #2a424d;
+    --input: #1d2f38;
+    --primary: #8fb5a9;
+    --primary-foreground: #0c1417;
+    --muted: #1d2f38;
+    --muted-foreground: #91a8b2;
+    --accent-sage: #2a424d;
+    --accent-slate: #1d2f38;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    @apply antialiased m-0 p-0 transition-colors duration-300;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: 'Outfit', 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  /* Premium Aura Button styling */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-medium py-2.5 px-6 rounded-2xl transition-all duration-300 shadow-md hover:opacity-95 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98];
+  }
+  
+  .btn-secondary {
+    @apply bg-surface text-surface-foreground border border-border font-medium py-2.5 px-6 rounded-2xl transition-all duration-300 shadow-sm hover:bg-muted hover:border-border active:scale-[0.98];
+  }
+
+  /* Soft floating Aura surfaces */
+  .surface-panel {
+    @apply bg-surface border border-border rounded-3xl shadow-lg shadow-black/[0.03] transition-all duration-300;
+  }
+
+  .aura-sage-box {
+    @apply bg-[#E8EFF0] dark:bg-[#1D2F38] border border-[#D4E2DD] dark:border-[#2A424D] rounded-3xl p-6 transition-all duration-300;
+  }
+}
+
+/* Custom Scrollbar for a serene Aura feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
