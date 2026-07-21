@@ -1,23 +1,58 @@
 export const analyzeMood = (text) => {
+  if (!text) return { label: 'Neutral', score: 3, color: 'text-gray-400', iconClass: 'bg-white/10' };
   const lowerText = text.toLowerCase();
   
-  if (lowerText.includes('stress') || lowerText.includes('overwhelm') || lowerText.includes('pressure')) {
-    return { label: 'Stressed', score: 2, color: 'text-wellness-danger', iconClass: 'bg-wellness-danger/20' };
+  // Crisis / Deep Distress / Suicidal Ideation / Severe Sadness
+  if (
+    lowerText.includes('die') || lowerText.includes('suicide') || lowerText.includes('kill') ||
+    lowerText.includes('hopeless') || lowerText.includes('hurt') || lowerText.includes('terrible') ||
+    lowerText.includes('sad') || lowerText.includes('down') || lowerText.includes('depress') ||
+    lowerText.includes('cry') || lowerText.includes('grief') || lowerText.includes('lonely') ||
+    lowerText.includes('alone') || lowerText.includes('empty') || lowerText.includes('pain') ||
+    lowerText.includes('miserable') || lowerText.includes('broken') || lowerText.includes('heartbroken')
+  ) {
+    return { label: 'Distressed', score: 1, color: 'text-red-400', iconClass: 'bg-red-500/20' };
   }
-  if (lowerText.includes('anxious') || lowerText.includes('worry') || lowerText.includes('panic')) {
-    return { label: 'Anxious', score: 2, color: 'text-wellness-danger', iconClass: 'bg-wellness-danger/20' };
+
+  // Anxiety / Fear / Panic
+  if (
+    lowerText.includes('anxious') || lowerText.includes('anxiety') || lowerText.includes('worry') ||
+    lowerText.includes('panic') || lowerText.includes('fear') || lowerText.includes('scared') ||
+    lowerText.includes('afraid') || lowerText.includes('nervous') || lowerText.includes('terrified')
+  ) {
+    return { label: 'Anxious', score: 2, color: 'text-amber-400', iconClass: 'bg-amber-500/20' };
   }
-  if (lowerText.includes('sad') || lowerText.includes('down') || lowerText.includes('depress')) {
-    return { label: 'Sad', score: 1, color: 'text-wellness-secondary', iconClass: 'bg-wellness-secondary/20' };
+
+  // Stress / Anger / Frustration
+  if (
+    lowerText.includes('stress') || lowerText.includes('overwhelm') || lowerText.includes('pressure') ||
+    lowerText.includes('angry') || lowerText.includes('anger') || lowerText.includes('frustrated') ||
+    lowerText.includes('annoyed') || lowerText.includes('mad') || lowerText.includes('tired') ||
+    lowerText.includes('exhausted') || lowerText.includes('burnout')
+  ) {
+    return { label: 'Stressed', score: 2, color: 'text-orange-400', iconClass: 'bg-orange-500/20' };
   }
-  if (lowerText.includes('happy') || lowerText.includes('good') || lowerText.includes('great') || lowerText.includes('awesome')) {
-    return { label: 'Happy', score: 5, color: 'text-wellness-success', iconClass: 'bg-wellness-success/20' };
+
+  // Happy / Joyful / Positive
+  if (
+    lowerText.includes('happy') || lowerText.includes('good') || lowerText.includes('great') ||
+    lowerText.includes('awesome') || lowerText.includes('love') || lowerText.includes('cheerful') ||
+    lowerText.includes('wonderful') || lowerText.includes('excited') || lowerText.includes('grateful') ||
+    lowerText.includes('glad') || lowerText.includes('blessed') || lowerText.includes('amazing')
+  ) {
+    return { label: 'Happy', score: 5, color: 'text-emerald-400', iconClass: 'bg-emerald-500/20' };
   }
-  if (lowerText.includes('okay') || lowerText.includes('fine') || lowerText.includes('alright')) {
-    return { label: 'Neutral', score: 3, color: 'text-gray-400', iconClass: 'bg-white/10' };
+
+  // Calm / Relaxed
+  if (
+    lowerText.includes('calm') || lowerText.includes('relax') || lowerText.includes('peace') ||
+    lowerText.includes('better') || lowerText.includes('soothed') || lowerText.includes('okay') ||
+    lowerText.includes('fine') || lowerText.includes('alright')
+  ) {
+    return { label: 'Calm', score: 4, color: 'text-teal-400', iconClass: 'bg-teal-500/20' };
   }
-  
-  // Default fallback if no keywords matched
+
+  // Default fallback
   return { label: 'Neutral', score: 3, color: 'text-gray-400', iconClass: 'bg-white/10' };
 };
 

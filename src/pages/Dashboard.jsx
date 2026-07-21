@@ -16,44 +16,46 @@ export default function Dashboard({ activeTab }) {
 
     const fetchSessionMoods = async () => {
       let combinedLogs = [...getMoodLogs()];
+      let apiSessionCount = 0;
+
       try {
         const userId = localStorage.getItem('mindmate_user_id') || 'default-user';
         const res = await fetch(`${API_BASE_URL}/api/history/?user_id=${userId}&page_size=10`);
         if (res.ok) {
           const data = await res.json();
           const items = data.items || [];
-          for (const item of items.slice(0, 5)) {
+          apiSessionCount = data.total !== undefined ? data.total : items.length;
+
+          for (const item of items.slice(0, 10)) {
             const detailRes = await fetch(`${API_BASE_URL}/api/history/${item.id}`);
             if (detailRes.ok) {
               const detailData = await detailRes.json();
               if (detailData.messages) {
                 for (const msg of detailData.messages) {
-                  let ts = msg.created_at || new Date().toISOString();
+                  let ts = msg.created_at || item.updated_at || new Date().toISOString();
                   if (typeof ts === 'string' && !ts.endsWith('Z') && !ts.includes('+')) {
                     ts = ts.replace(' ', 'T') + 'Z';
                   }
 
-                  // 1. Check user message content directly
+                  // 1. Analyze user message content directly
                   if (msg.role && msg.role.toLowerCase() === 'user' && msg.content) {
                     const analyzed = analyzeMood(msg.content);
-                    if (analyzed && analyzed.label !== 'Neutral') {
+                    if (analyzed) {
                       combinedLogs.push({ label: analyzed.label, score: analyzed.score, timestamp: ts });
                     }
                   }
 
-                  // 2. Check assistant emotion metadata
+                  // 2. Analyze assistant emotion metadata
                   if (msg.emotion && msg.emotion !== 'neutral') {
                     const em = msg.emotion.toLowerCase();
                     let label = 'Neutral';
                     let score = 3;
                     if (['happy', 'joy', 'content', 'excited', 'grateful', 'uplifted'].includes(em)) { label = 'Happy'; score = 5; }
-                    else if (['sad', 'sadness', 'depressed', 'down', 'grief', 'lonely', 'distressed'].includes(em)) { label = 'Sad'; score = 1; }
+                    else if (['sad', 'sadness', 'depressed', 'down', 'grief', 'lonely', 'distressed'].includes(em)) { label = 'Distressed'; score = 1; }
                     else if (['anxious', 'anxiety', 'fear', 'worry', 'panic'].includes(em)) { label = 'Anxious'; score = 2; }
                     else if (['stressed', 'stress', 'anger', 'angry', 'frustrated'].includes(em)) { label = 'Stressed'; score = 2; }
                     
-                    if (label !== 'Neutral') {
-                      combinedLogs.push({ label, score, timestamp: ts });
-                    }
+                    combinedLogs.push({ label, score, timestamp: ts });
                   }
                 }
               }
@@ -67,14 +69,15 @@ export default function Dashboard({ activeTab }) {
       // Sort by timestamp chronologically
       combinedLogs.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
 
+      const totalCount = Math.max(apiSessionCount, combinedLogs.length);
+
       if (combinedLogs.length > 0) {
-        const nonNeutralLogs = combinedLogs.filter(l => l.label && l.label !== 'Neutral');
-        const latestLog = nonNeutralLogs.length > 0 ? nonNeutralLogs[nonNeutralLogs.length - 1] : combinedLogs[combinedLogs.length - 1];
+        // Pick latest log
+        const latestLog = combinedLogs[combinedLogs.length - 1];
         
         let trendStr = "Stable";
-        const relevantLogs = nonNeutralLogs.length > 1 ? nonNeutralLogs : combinedLogs;
-        if (relevantLogs.length > 1) {
-          const prevLog = relevantLogs[relevantLogs.length - 2];
+        if (combinedLogs.length > 1) {
+          const prevLog = combinedLogs[combinedLogs.length - 2];
           if (latestLog.score > prevLog.score) trendStr = "Improving";
           else if (latestLog.score < prevLog.score) trendStr = "Declining";
         }
@@ -82,7 +85,13 @@ export default function Dashboard({ activeTab }) {
         setMoodData({
           currentMood: latestLog.label || "Neutral",
           trend: trendStr,
-          totalLogs: combinedLogs.length
+          totalLogs: totalCount
+        });
+      } else if (apiSessionCount > 0) {
+        setMoodData({
+          currentMood: "Neutral",
+          trend: "Stable",
+          totalLogs: apiSessionCount
         });
       }
     };
