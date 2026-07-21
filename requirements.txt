@@ -44,8 +44,9 @@ langgraph-checkpoint>=2.0.24
 langgraph-checkpoint-postgres>=2.0.24
 langgraph-checkpoint-sqlite>=2.0.6
 
-# --- LLM client (Gemini via LangChain) ---
+# --- LLM clients (Gemini + Groq via LangChain) ---
 langchain-google-genai>=2.0.9
+langchain-groq>=0.2.0
 langchain-core>=0.3.37
 
 # --- Postgres driver (for production checkpointing) ---
