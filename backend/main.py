@@ -104,14 +104,23 @@ app = FastAPI(
 
 
 # ── CORS ──────────────────────────────────────────────────────
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:5174",
+]
+
+# Add production frontend URL from environment if set
+if settings.FRONTEND_URL and settings.FRONTEND_URL not in allowed_origins:
+    allowed_origins.append(settings.FRONTEND_URL)
+
+# Also allow *.onrender.com for Render preview URLs
+allowed_origins_regex = r"https://.*\.onrender\.com"
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        settings.FRONTEND_URL,
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://localhost:5174",
-    ],
+    allow_origins=allowed_origins,
+    allow_origin_regex=allowed_origins_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
