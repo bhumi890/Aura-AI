@@ -43,7 +43,7 @@ Aura AI is a production-grade, multi-agent AI therapeutic companion built with a
 ## 📂 Repository Directory Structure
 
 ```text
-mindmate-ai/
+Aura-ai/
 ├── ai_core/                    # TIER 3: LangGraph AI Pipeline & Agents
 │   ├── agents/                 # Agent Nodes: supervisor, emotion, memory, rag, wellness_plan
 │   ├── graph/                  # LangGraph StateDefinition & Graph Compilation (builder.py)
