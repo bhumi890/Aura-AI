@@ -92,11 +92,11 @@ mindmate-ai/
 ### 2. Environment Configuration (`.env`)
 Ensure your `.env` file exists in the project root with your valid API key:
 ```env
-GOOGLE_API_KEY=your_actual_google_gemini_api_key
-HOMEMIND_ENV=development
+GROQ_API_KEY=your_groq_api_key
+
+Aura_ENV=development
 DATABASE_URL=sqlite+aiosqlite:///./wellness_companion.db
 FRONTEND_URL=http://localhost:5173
-```
 
 ### 3. Start the Backend Server (Terminal 1)
 Open a terminal in the project root and launch FastAPI with live reloading:
