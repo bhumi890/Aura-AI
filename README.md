@@ -1,6 +1,6 @@
-# MindMate AI — 3-Tier Emotional Wellness & Voice Companion
+# Aura-AI — 3-Tier Emotional Wellness & Voice Companion
 
-MindMate AI is a production-grade, multi-agent AI therapeutic companion built with a modern 3-tier architecture. It combines real-time voice and text chat, multi-agent cognitive orchestration (using LangGraph and Google Gemini), and dynamic mood tracking and analytics.
+Aura AI is a production-grade, multi-agent AI therapeutic companion built with a modern 3-tier architecture. It combines real-time voice and text chat, multi-agent cognitive orchestration (using LangGraph and Google Gemini), and dynamic mood tracking and analytics.
 
 ---
 
