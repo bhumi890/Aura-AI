@@ -114,7 +114,6 @@ Aura AI was built by a team of five as part of a GenAI & Agentic AI internship c
 | **Aditi** | RAG Pipeline | Knowledge Retrieval Agent |
 | **Sheel** | Backend + Voice + Database | Voice Integration (major feature, not a standalone agent) |
 | **Bhumi Saxena** | Safety + Mood Tracker + Wellness Plan + Testing + Deployment | Safety Agent |
-```
 
 ---
 ## 🚀 How to Run Locally
