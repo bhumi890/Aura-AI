@@ -28,8 +28,8 @@ Aura AI is a production-grade, multi-agent AI therapeutic companion built with a
 +-----------------------------------------------------------------------------------+
 |                             TIER 3: AI CORE LAYER                                 |
 |               (LangGraph Multi-Agent Orchestration + Google Gemini)               |
-|                                                                                   |
-|  [supervisor_entry] ---> Evaluates intent & routes to specialized agents:         |
+| [safety_node]      ---> Screens incoming input for risk/crisis content            |
+| [supervisor_entry] ---> Evaluates intent & routes to specialized agents:           |
 |      ├── [emotion_node]       --> Classifies emotional state (joy, sadness, etc.) |
 |      ├── [memory_agent]       --> Reads/writes user context from SQLite Checkpoints|
 |      ├── [rag_node]           --> Retrieves therapeutic knowledge (FAISS / CPU)   |
@@ -43,42 +43,78 @@ Aura AI is a production-grade, multi-agent AI therapeutic companion built with a
 ## 📂 Repository Directory Structure
 
 ```text
-Aura-ai/
-├── ai_core/                    # TIER 3: LangGraph AI Pipeline & Agents
-│   ├── agents/                 # Agent Nodes: supervisor, emotion, memory, rag, wellness_plan
-│   ├── graph/                  # LangGraph StateDefinition & Graph Compilation (builder.py)
-│   ├── llm/                    # Gemini API clients, model tier definitions (2.5-flash), prompts
-│   ├── rag/                    # FAISS vector store and document processing
-│   └── runtime/                # Lifecycle management (build_app) & async streaming execution
+Aura-AI/
+├── .gitignore                   # Git tracking exclusion rules
+├── index.html                   # Single Page Application entry HTML
+├── package-lock.json           # Locked Node.js dependency tree
+├── package.json                # Frontend dependencies and build scripts
+├── postcss.config.js           # PostCSS setup for Tailwind CSS
+├── README.md                    # Project overview & documentation
+├── render.yaml                  # Backend deployment setup (Render)
+├── requirements.txt            # Backend & AI core Python packages
+├── tailwind.config.js          # Tailwind styling rules
+├── vercel.json                  # Frontend deployment setup (Vercel)
+├── vite.config.js              # Vite build setup & dev server proxy
 │
-├── backend/                    # TIER 2: FastAPI Gateway & Database Models
-│   ├── api/                    # REST API endpoints (chat.py, auth.py, voice.py, wellness.py)
-│   ├── database/               # Async SQLAlchemy database connection & schema initialization
-│   ├── models/                 # ORM Models (User, ChatMessage, MoodLog, WellnessPlan)
-│   ├── config.py               # Pydantic Settings & environment variable configuration
-│   └── main.py                 # FastAPI application entrypoint & app.state lifecycle
+├── ai_core/                     # TIER 3: LangGraph AI Pipeline & Multi-Agent Engine
+│   ├── agents/                  # Autonomous agent nodes (supervisor, emotion, memory, rag, wellness_plan, safety)
+│   ├── graph/                   # LangGraph state machine builder, checkpointer, and edge definitions
+│   ├── llm/                     # Groq API client instances and Llama model tier configurations
+│   ├── prompts/                 # System prompts for agent routing, sentiment, safety, and wellness plans
+│   ├── rag/                     # Vector store pipeline, mental health document PDFs, embeddings, & preprocessors
+│   ├── runtime/                 # App lifecycle setup, execution entrypoints, and async streaming
+│   ├── scripts/                 # Embeddings creation and document ingestion execution scripts
+│   ├── state/                   # Shared state schemas and reducer functions for LangGraph execution
+│   ├── tests/                   # Integration and unit test suite for the AI pipeline
+│   └── utils/                   # Telemetry, metrics collection, and application loggers
 │
-├── src/                        # TIER 1: Frontend Web Application
-│   ├── components/             # Reusable UI components (Navigation, AudioPlayer, MoodGraph)
-│   ├── pages/                  # Route views (Dashboard.jsx, VoiceChat.jsx, Settings.jsx)
-│   └── utils/                  # Client-side helpers and local storage wrappers
+├── backend/                     # TIER 2: FastAPI Web Server & Database Infrastructure
+│   ├── api/                     # REST API routers (chat, auth, history, journal, mood, rag, users, voice, wellness)
+│   ├── database/                # Async SQLAlchemy connection setup, CRUD handlers, ORM models, and schemas
+│   ├── middleware/              # Authentication & session verification middleware
+│   ├── utils/                   # Server logging utilities
+│   ├── voice/                   # Audio handling, Speech-to-Text, and Text-to-Speech utilities
+│   ├── config.py                # Pydantic Settings & environment variable configuration
+│   └── main.py                  # FastAPI application entrypoint & app lifecycle state setup
 │
-├── docs/                       # Project Documentation & Historical Archives
-│   ├── HOW_TO_RUN.md           # Quickstart installation and running guide
-│   ├── PROJECT_OVERVIEW.md     # Original architectural specifications
-│   └── legacy_archive/         # Archive of initial module extractions
+├── src/                          # TIER 1: React Single Page Application (Frontend)
+│   ├── assets/                  # Graphics, icons, and hero media
+│   ├── components/              # Reusable UI elements (Navigation, AudioPlayer, MoodGraph)
+│   ├── pages/                   # Route views (Dashboard.jsx, Login.jsx, Settings.jsx, VoiceChat.jsx)
+│   ├── utils/                   # Client-side helpers and local storage wrappers
+│   ├── App.css                  # Main application component layout styles
+│   ├── App.jsx                  # Main React router and client root component
+│   ├── config.js                # Frontend API base URL configuration
+│   ├── index.css                # Global Tailwind CSS directives
+│   └── main.jsx                 # DOM mounting entrypoint file
 │
-├── scripts/                    # Utility & Maintenance Scripts
-│   ├── setup_db.py             # Script to initialize database tables manually
-│   ├── reset_database.py       # Script to wipe and reseed database tables
-│   └── test_pipeline.py        # Standalone diagnostic script for testing LangGraph execution
+├── docs/                         # Project Documentation & Historical Artifacts
+│   ├── legacy_archive/          # Historical code iterations and archived extractions
+│   ├── HOW_TO_RUN.md            # Developer quickstart and execution instructions
+│   └── PROJECT_OVERVIEW.md      # Architectural specifications and system design notes
 │
-├── public/                     # Static web assets (icons, favicon)
-├── requirements.txt            # Python dependencies (FastAPI, LangGraph, LangChain, FAISS)
-├── package.json                # Node.js dependencies (React, Vite, Tailwind CSS)
-├── vite.config.js              # Vite bundler & backend API reverse proxy configuration
-└── .env                        # Environment configuration and secrets (not tracked in Git)
+├── public/                       # Public static assets (favicons, SVG icon sprites)
+│
+└── scripts/                      # Database & System Maintenance Tools
+    ├── reset_database.py        # Wipes and resets local database tables
+    ├── setup_db.py              # Seeds initial database schema and tables
+    ├── test_pipeline.py         # Diagnostic runner for LangGraph pipeline testing
+    └── verify_faiss.py          # Validates vector database index health
 ```
+
+---
+## 👥 Contributors
+
+Aura AI was built by a team of five as part of a GenAI & Agentic AI internship capstone.
+
+| Member | Module | Agent Ownership |
+|---|---|---|
+| **Somaansh** | Frontend + Dashboard | Emotion Agent |
+| **Bhumi Kharb** | LangGraph + Orchestration | Supervisor Agent + Memory Agent |
+| **Aditi** | RAG Pipeline | Knowledge Retrieval Agent |
+| **Sheel** | Backend + Voice + Database | Voice Integration (major feature, not a standalone agent) |
+| **Bhumi Saxena** | Safety + Mood Tracker + Wellness Plan + Testing + Deployment | Safety Agent |
+'''
 
 ---
 
@@ -97,6 +133,7 @@ GROQ_API_KEY=your_groq_api_key
 Aura_ENV=development
 DATABASE_URL=sqlite+aiosqlite:///./wellness_companion.db
 FRONTEND_URL=http://localhost:5173
+```
 
 ### 3. Start the Backend Server (Terminal 1)
 Open a terminal in the project root and launch FastAPI with live reloading:
@@ -120,6 +157,9 @@ npm run dev
 2. **AI Rate Limits & Auto-Retry:** `ai_core/llm/clients.py` configures `GeminiChatModel` with `max_retries=4` and uses `gemini-2.5-flash` (`ai_core/llm/models.py`) to prevent quota exhaustion and automatically back off on rate-limit spikes (`429 RESOURCE_EXHAUSTED`).
 3. **Pydantic Settings Configuration:** `backend/config.py` uses `"extra": "ignore"` inside `Settings.model_config` to ensure that adding new environment variables to `.env` will never cause validation failures during application startup.
 4. **Testing the AI Pipeline:** To verify AI core connectivity without booting the full web stack, run the standalone diagnostic tool:
-   ```powershell
+```powershell
    python scripts/test_pipeline.py
-   ```
+```
+
+---
+
