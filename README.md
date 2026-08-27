@@ -27,9 +27,9 @@ Aura AI is a production-grade, multi-agent AI therapeutic companion built with a
                                         v  State & Context Passing
 +-----------------------------------------------------------------------------------+
 |                             TIER 3: AI CORE LAYER                                 |
-|               (LangGraph Multi-Agent Orchestration + Google Gemini)               |
+|               (LangGraph Multi-Agent Orchestration + Groq API)                    |
 | [safety_node]      ---> Screens incoming input for risk/crisis content            |
-| [supervisor_entry] ---> Evaluates intent & routes to specialized agents:           |
+| [supervisor_entry] ---> Evaluates intent & routes to specialized agents:          |
 |      ├── [emotion_node]       --> Classifies emotional state (joy, sadness, etc.) |
 |      ├── [memory_agent]       --> Reads/writes user context from SQLite Checkpoints|
 |      ├── [rag_node]           --> Retrieves therapeutic knowledge (FAISS / CPU)   |
