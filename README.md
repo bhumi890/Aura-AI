@@ -100,7 +100,6 @@ Aura-AI/
     ├── setup_db.py              # Seeds initial database schema and tables
     ├── test_pipeline.py         # Diagnostic runner for LangGraph pipeline testing
     └── verify_faiss.py          # Validates vector database index health
-```
 
 ---
 ## 👥 Contributors
