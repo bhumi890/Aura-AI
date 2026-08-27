@@ -28,6 +28,7 @@ Aura AI is a production-grade, multi-agent AI therapeutic companion built with a
 +-----------------------------------------------------------------------------------+
 |                             TIER 3: AI CORE LAYER                                 |
 |               (LangGraph Multi-Agent Orchestration + Groq API)                    |
+|                                                                                   |
 | [safety_node]      ---> Screens incoming input for risk/crisis content            |
 | [supervisor_entry] ---> Evaluates intent & routes to specialized agents:          |
 |      ├── [emotion_node]       --> Classifies emotional state (joy, sadness, etc.) |
@@ -112,7 +113,7 @@ Aura AI was built by a team of five as part of a GenAI & Agentic AI internship c
 | **Somaansh** | Frontend + Dashboard | Emotion Agent |
 | **Bhumi Kharb** | LangGraph + Orchestration | Supervisor Agent + Memory Agent |
 | **Aditi** | RAG Pipeline | Knowledge Retrieval Agent |
-| **Sheel** | Backend + Voice + Database | Voice Integration (major feature, not a standalone agent) |
+| **Sheel** | Backend + Voice + Database | Voice Integration  |
 | **Bhumi Saxena** | Safety + Mood Tracker + Wellness Plan + Testing + Deployment | Safety Agent |
 
 ---
