@@ -1,6 +1,6 @@
 # Aura-AI — 3-Tier Emotional Wellness & Voice Companion
 
-Aura AI is a production-grade, multi-agent AI therapeutic companion built with a modern 3-tier architecture. It combines real-time voice and text chat, multi-agent cognitive orchestration (using LangGraph and Google Gemini), and dynamic mood tracking and analytics.
+Aura AI is a production-grade, multi-agent AI therapeutic companion built with a modern 3-tier architecture. It combines real-time voice and text chat, multi-agent cognitive orchestration (using LangGraph and Groq API), and dynamic mood tracking and analytics.
 
 ---
 
@@ -100,6 +100,7 @@ Aura-AI/
     ├── setup_db.py              # Seeds initial database schema and tables
     ├── test_pipeline.py         # Diagnostic runner for LangGraph pipeline testing
     └── verify_faiss.py          # Validates vector database index health
+```
 
 ---
 ## 👥 Contributors
@@ -113,10 +114,9 @@ Aura AI was built by a team of five as part of a GenAI & Agentic AI internship c
 | **Aditi** | RAG Pipeline | Knowledge Retrieval Agent |
 | **Sheel** | Backend + Voice + Database | Voice Integration (major feature, not a standalone agent) |
 | **Bhumi Saxena** | Safety + Mood Tracker + Wellness Plan + Testing + Deployment | Safety Agent |
-'''
+```
 
 ---
-
 ## 🚀 How to Run Locally
 
 ### 1. Prerequisites
